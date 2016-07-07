@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Test;assembly=Test"
+             BackgroundColor="#004C92"
+             xmlns:cm="clr-namespace:Caliburn.Micro.Xamarin.Forms;assembly=Caliburn.Micro.Platform.Xamarin.Forms"
+             x:Class="Test.Views.LoginView">
+  <ScrollView>
+    <Grid>     
+          <Grid.RowDefinitions>
+              <RowDefinition Height="50" />
+              <RowDefinition />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="0.25*" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="26" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>                   
+       
+          <Button Grid.Row="5"  Margin="8, 2, 8, 2" Text="LOGIN" cm:Message.Attach="[Event Clicked]=[Action Login]" HorizontalOptions="FillAndExpand"
+                  BorderWidth="0" BackgroundColor="#2FD1FF" TextColor="White" />    
+   
+        
+      </Grid>
+  </ScrollView>
+</ContentPage>

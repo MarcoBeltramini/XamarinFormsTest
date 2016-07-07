@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Test;assembly=Test"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"            
+             xmlns:cm="clr-namespace:Caliburn.Micro.Xamarin.Forms;assembly=Caliburn.Micro.Platform.Xamarin.Forms"
+             xmlns:conv="clr-namespace:Test.Converters;assembly=Test"
+             x:Class="Test.Views.MainView">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <conv:TemperatureConverter x:Key="tempConverter"/>
+      <conv:StringToFileImageSourceConverter x:Key="toFileImageSource"/>
+      <conv:CurrentModeToBooleanConverter x:Key="modeToBooleanConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <AbsoluteLayout>
+    <StackLayout Spacing="15" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+      <RelativeLayout HeightRequest="60">
+        <Image HeightRequest="40" WidthRequest="60" Source="{local:ImageResource Test.Assets.Logo_TEST.png}"
+               RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=8}"
+          RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=8}"/>
+        <controls:ImageButton BackgroundColor = "Transparent"
+                    ImageWidthRequest = "30"
+                    ImageHeightRequest = "30"
+                    Source = "{local:ImageResource Test.Assets.Circles.png}"
+                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Constant=0}"
+                    RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=20}"/>
+      </RelativeLayout>
+      <ListView ItemsSource="{Binding Houses}" RowHeight="400">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <RelativeLayout HeightRequest="350" Margin="10">
+                <local:RoundedBoxView Color="White" CornerRadius="10"
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=0}"
+                                     RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=0}"
+                                     RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Constant=0}"
+                                     RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Constant=0}"/>
+                <Grid Margin="10" RowSpacing="1" BackgroundColor="White" RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=0}"
+                                      RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=0}"
+                                      RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Constant=0}"
+                                      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Constant=-50}">
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="80"  />
+                    <RowDefinition Height="Auto"  />
+                    <RowDefinition Height="Auto"  />
+                  </Grid.RowDefinitions>
+                  <Label Text="{Binding Name}" TextColor="Black" Grid.Row="0"/>
+                  <ListView ItemsSource="{Binding Rooms}" RowHeight="350" Grid.Row="1">
+                    <ListView.ItemTemplate>
+                      <DataTemplate>
+                        <ViewCell>
+                          <Grid>
+                            <Grid.RowDefinitions>
+                              <RowDefinition />
+                              <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <RelativeLayout HeightRequest="250" Grid.Row="0">
+                              <Image Aspect="AspectFill" Source="{Binding Photo.ImgPath, Converter={StaticResource toFileImageSource}}"
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=0}"
+                                        RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=0}"
+                                        RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Constant=0}"
+                                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Constant=-10}"/>
+                              <Label Text="{Binding Name}" x:Name="RoomName" FontSize="17" TextColor="White" FontAttributes="Bold" 
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=15}"
+                                     RelativeLayout.YConstraint="{ConstraintExpression Type=Constant,Constant=10}" />
+                              <Label Text="{Binding SelectedSeason}" FontSize="14" TextColor="White"  
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=15}"
+                                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,Property=Y,ElementName=RoomName,Constant=20}" />
+                              <Label Text="5h" x:Name="JollyTime" FontSize="17" TextColor="Red" IsVisible="{Binding CurrentMode,Converter={StaticResource modeToBooleanConverter}, ConverterParameter=JLLY}"
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=15}"
+                                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Constant=-60}" />
+                              <Label Text="{Binding DesiredTemperature}" x:Name="DesiredTemp" FontSize="17" TextColor="White"   
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=15}"
+                                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,Property=Y,ElementName=JollyTime,Constant=-20}" />
+                              <Label Text="{Binding CurrentMode}" FontSize="14" TextColor="White" FontAttributes="Bold"
+                                     RelativeLayout.XConstraint="{ConstraintExpression Type=Constant,Constant=15}"
+                                     RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,Property=Y,ElementName=DesiredTemp,Constant=20}" />
+                              <Label Text="{Binding CurrentTemperature, Converter={StaticResource tempConverter}}" FontSize="80" TextColor="White" 
+                                   RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width,Factor=0.5,Constant=-70}"
+                                   RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height,Factor=0.5,Constant=-20}" />
+                            </RelativeLayout>
+                            <StackLayout Grid.Row="1" Spacing="3" Orientation="Horizontal">
+                              <Button Text="AUTO" Style="{StaticResource SmallEllipseButton}" BackgroundColor="{StaticResource BackgroundColor}" cm:Message.Attach="Automatic">                               
+                              </Button> 
+                              <Button Text="MANU" Style="{StaticResource SmallEllipseButton}" BackgroundColor="{StaticResource BackgroundColor}" cm:Message.Attach="Manual">                               
+                              </Button>                             
+                              <Button Text="HDAY" Style="{StaticResource SmallEllipseButton}" BackgroundColor="{StaticResource BackgroundColor}" cm:Message.Attach="Holiday">                               
+                              </Button>
+                              <Button Text="OFF" Style="{StaticResource SmallEllipseButton}" BackgroundColor="{StaticResource BackgroundColor}" cm:Message.Attach="Off">                                
+                              </Button>
+                            </StackLayout>
+                          </Grid>
+                        </ViewCell>
+                      </DataTemplate>
+                    </ListView.ItemTemplate>
+                  </ListView>
+                </Grid>               
+              </RelativeLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>        
+      </ListView>
+    </StackLayout>
+    
+    <AbsoluteLayout x:Name="ManuModeOverlay" BackgroundColor="{StaticResource OverlayBackground}" IsVisible="{Binding ShowManuOverlay}" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+      <Grid AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White" >
+        <Grid.RowDefinitions>
+          <RowDefinition Height="60"  />
+          <RowDefinition Height="2"  />
+          <RowDefinition Height="Auto"  />
+          <RowDefinition Height="150"  />
+          <RowDefinition Height="130"  />
+          <RowDefinition Height="110"  />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" TextColor="{StaticResource ForegroundColor}"  Text = "MODALITA MANUALE" FontAttributes="Bold" FontSize="17" HorizontalOptions="Center" VerticalOptions="Center"/>
+        <BoxView Grid.Row="1" Color="{StaticResource SeparatorBrush}" HeightRequest="1"/>
+        <Label Grid.Row="2" TextColor="{StaticResource ForegroundColor}"  Text = "TEMPERATURA" FontAttributes="Bold" FontSize="14" HorizontalOptions="Start" Margin="10"/>
+        <Label Grid.Row="3" TextColor="{StaticResource ForegroundColor}"  Text = "{Binding ManuOverlayTemperature}" FontSize="70" HorizontalOptions="Center" Margin="10"/>
+        <StackLayout  Grid.Row="4" Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+          <controls:ImageButton Source="{local:ImageResource Test.Assets.Minus.png}" ImageHeightRequest="70" ImageWidthRequest="70" BackgroundColor="Transparent" cm:Message.Attach="DecreaseManuTemperature"/>
+          <controls:ImageButton Source="{local:ImageResource Test.Assets.Plus.png}" ImageHeightRequest="70" ImageWidthRequest="70" BackgroundColor="Transparent" cm:Message.Attach="IncreaseManuTemperature"/>
+        </StackLayout>
+        <Button Grid.Row="5" Text="CONFERMA" BackgroundColor="{StaticResource BackgroundColor}" Style="{StaticResource EllipseButton}" HorizontalOptions="Center" cm:Message.Attach="ConfirmManuMode"/>
+      </Grid>      
+    </AbsoluteLayout>
+  </AbsoluteLayout>
+  
+</ContentPage>
